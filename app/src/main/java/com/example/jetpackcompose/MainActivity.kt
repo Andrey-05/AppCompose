@@ -1,9 +1,11 @@
 package com.example.jetpackcompose
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +24,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         //conteudo que sera mostardo ao rodar
         setContent {
-            MessageCard(Message("Andrey o Tal", "Rei do kotlin não tem jeito"))
+            JetpackComposeTheme() {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    MessageCard(Message("Andrey o Tal", "Rei do kotlin não tem jeito"))
+                }
+            }
         }
     }
 }
@@ -49,6 +55,7 @@ fun MessageCard(msg: Message) {
             modifier = Modifier
                 .size(45.dp)
                 .clip(CircleShape)
+                .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
         )
 
         //Separa os elementos horizontalmente
@@ -58,23 +65,43 @@ fun MessageCard(msg: Message) {
         //alinha elementos de dentro em coluna
         Column {
             //texto com nome do usuário
-            Text(text = msg.author)
+            Text(
+                text = msg.author,
+                //define estilo do texto
+                color = MaterialTheme.colorScheme.secondary,
+                style = MaterialTheme.typography.titleSmall
+            )
 
             //Separa os elementos verticalmente
-            Spacer(modifier = Modifier
-                .height(4.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
             //texto de descrição
-            Text(text = msg.body)
+            Text(
+                text = msg.body,
+                // define o estilo da fonte do texto
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 
 }
+
+//versões dark mode e ligth mode
+@Preview(name = "Light Mode")
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    name = "Dark Mode"
+)
 
 @Preview
 @Composable
 //preview para testes
 fun PreviewMessageCard() {
     val name = "preview"
-    MessageCard(Message("Andrey o Tal", "Rei do kotlin não tem jeito"))
+    JetpackComposeTheme() {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            MessageCard(Message("Andrey o Tal", "Rei do kotlin não tem jeito"))
+        }
+    }
 }
